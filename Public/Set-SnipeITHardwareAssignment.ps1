@@ -117,7 +117,7 @@ function Set-SnipeITHardwareAssignment
         [Parameter(ParameterSetName = "Checkin")]
         [String]$Note,
 
-        [APISubmittableAttribute()]
+        [APISubmittableAttribute(TreatAsBoundParameter = $true)]
         [Parameter(ParameterSetName = "InputObject")]
         [Parameter(ParameterSetName = "Default")]
         [Parameter(ParameterSetName = "Checkout")]
@@ -169,7 +169,6 @@ function Set-SnipeITHardwareAssignment
 
             $endpoint = "$Url/api/v1/assets/$i/$($Type.ToLower())"
             $table    = ConvertTo-SnipeITAPI $PSCmdlet -As "Submittable"
-            $table.Remove("type")
             Invoke-SnipeITRestMethod -Method "POST" -Url $endpoint -APIKey $APIKey -Body $table
         }
     }
