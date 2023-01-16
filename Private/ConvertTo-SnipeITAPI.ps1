@@ -2,6 +2,10 @@
     .SYNOPSIS
     Helper function to help map data to how the SnipeIT API expects.
 
+    .DESCRIPTION
+    Walks the parameters of the calling function and parses them into a format
+    that can be directly consumed by the Snipe-IT API.
+
     .PARAMETER PSCmdletVariable
     Specifies a cmdlet's PSCmdlet... variable.
 
@@ -29,8 +33,6 @@ function ConvertTo-SnipeITAPI
     )
 
 
-    $query = [System.Web.HttpUtility]::ParseQueryString("")
-
     # Allllll of this is included since we're not parsing BoundParameters, so
     # filtering it down is a must
     $blacklist =
@@ -54,15 +56,32 @@ function ConvertTo-SnipeITAPI
         "Confirm"
     )
 
+    # The payload of whatever we're compiling to - this may stay as a hash
+    # table, or could wind up converted to a query string
+    $payload = @{ }
+
+    # Filtered list of parameters - get rid of a ton of built-in PowerShell
+    # bits that will otherwise be included
     $filteredParams = $PSCmdletVariable.MyInvocation.MyCommand.Parameters.GetEnumerator().Where({ $_.Key -notin $blacklist })
     foreach ($param in $filteredParams)
     {
+        # Try to grab the value of the current parameter we're looking at
         $variable = (Get-Variable $param.Key)
 
-        # Skip if there's no value to possibly parse
-        if ($null -eq $variable.Value)
+        # Skip if there's no value to possibly parse except when there's a
+        # nullable type set - an empty String won't trip this because
+        # PowerShell will always parse a null as an empty string
+        if ($null                           -eq $variable.Value -and 
+            $param.Value.ParameterType.Name -ne 'Nullable`1')
         {
             continue
+        }
+
+        $variable = [PSCustomObject]@{
+            Name       = $variable.Name
+            Value      = $variable.Value
+            Attributes = $variable.Attributes
+            Type       = $param.Value.ParameterType.Name
         }
 
 
@@ -72,7 +91,8 @@ function ConvertTo-SnipeITAPI
             $_.TypeId.Name -contains "API$($As)Attribute"
         })
 
-        # Skip if parameter is not tagged with an attribute
+        # Any paramater without an attribute is considered to not be relevant
+        # to the API and can be skipped
         if (!$attribute)
         {
             continue
@@ -80,9 +100,6 @@ function ConvertTo-SnipeITAPI
 
         # Asssigning a default value won't cause PowerShell to consider it a
         # bound parameter, so we support specifying that you want that that
-
-        # If TreatAsBoundParameter isn't set, check if the value is actually
-        # in the BoundParameters list. If it's not, it's not, it can be skipped.
         elseif (!$attribute.TreatAsBoundParameter -and
                  $variable.Name                   -notin $PSCmdletVariable.MyInvocation.BoundParameters.Keys)
         {
@@ -93,8 +110,8 @@ function ConvertTo-SnipeITAPI
         # If we've gotten this far, there's data to convert
         if ($attribute.APIParameterName)
         {
-            # Direct specifications in the attribute are considered gospel
-            # Simply override the key name if it's specified
+            # The parameter name in the attribute is considered gospel
+            # No further processing is needed if it's explicitly set
             $key = $attribute.APIParameterName
         }
 
@@ -128,7 +145,7 @@ function ConvertTo-SnipeITAPI
         # If you need do any further data bending before passing it along...
         # For instance, transforming a DateTime string into a differnet format
         # that whatever underlying API expects
-        switch ($variable.Value.GetType().Name)
+        switch ($variable.Type)
         {
             { @("Boolean", "SwitchParameter") -contains $_ }
             {
@@ -143,16 +160,21 @@ function ConvertTo-SnipeITAPI
                 $value = ($variable.Value.ToShortDateString()).Replace("/", "-")
             }
 
-            "Int32"
+            "String"
             {
-                # Allow setting null or 0 to effectively remove an integer field
-                if ($value -eq 0 -or 
-                    $null  -eq $value)
+                # Consider empty strings null, which effectively unsets
+                # a value in the Snipe-IT API
+                if ([String]::IsNullOrEmpty($variable.Value))
                 {
-                    $value = ""
-                }   
+                    $value = $null
+                }
+
+                else
+                {
+                    $value = $variable.Value
+                }
             }
-        
+
             default
             {
                 # No need to do any adaptation
@@ -162,12 +184,13 @@ function ConvertTo-SnipeITAPI
 
 
         # Almost done...
-        $query[$key] = $value
+        $payload[$key] = $value
     }
 
 
-    # I thought about implicitly deciding based on the attribute, but I think
-    # this is a little safer/better design...
+    # At this point, we're done building the payload and just need to
+    # determine whether to convert it to a query string, or leave it
+    # as a hash table for the body
     switch ($As)
     {
         "QueryString"
@@ -177,23 +200,34 @@ function ConvertTo-SnipeITAPI
 
             # Also, it's used all over the place, which is why I implement it
             # here rather than in the calling function
-            switch ($query["order"])
+            switch ($payload["order"])
             {
                 "Ascending"
                 {
-                    $query["order"] = "asc"
+                    $payload["order"] = "asc"
                 }
 
                 "Descending"
                 {
-                    $query["order"] = "desc"
+                    $payload["order"] = "desc"
                 }
             }
 
 
             # Return just the query string, don't need the entire URI
-            if ($query.Count)
+            if ($payload.Count)
             {
+                $query = [System.Web.HttpUtility]::ParseQueryString("")
+                foreach ($key in $payload.Keys)
+                {
+                    # Skip nulls, literally useless in the query string
+                    # but have meaning in the body of a request
+                    if ($null -ne $payload[$key])
+                    {
+                        $query[$key] = $payload[$key]
+                    }
+                }
+
                 "?$($query.ToString())"
                 return
             }
@@ -207,17 +241,7 @@ function ConvertTo-SnipeITAPI
 
         "Submittable"
         {
-            # Build a hash table to pass along as the Body to a REST method call
-
-            # It seems a bit odd that I'm converting a query to a hash table
-            # instead of the other way around?
-            $table = @{ }
-            foreach ($value in $query.GetEnumerator())
-            {
-                $table[$value] = $query[$value]
-            }
-
-            $table
+            $payload
         }
     }
 }
