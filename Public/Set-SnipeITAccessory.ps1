@@ -55,7 +55,7 @@ function Set-SnipeITAccessory
         [Parameter(Position          = 0,
                    ValueFromPipeline = $true,
                    ParameterSetName  = "InputObject")]
-        [PSTypeName("axSnipeIT.Category")][Object]$InputObject,
+        [PSTypeName("axSnipeIT.Accessory")][Object]$InputObject,
 
         [Parameter(Position          = 0,
                    Mandatory         = $true,
