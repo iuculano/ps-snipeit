@@ -70,6 +70,11 @@ function Get-SnipeITUser
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
         [ValidateNotNullOrEmpty()]
+        [String]$Username,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
         [String]$Sort,
 
         [APIQueryStringAttribute()]
