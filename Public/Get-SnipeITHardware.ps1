@@ -63,11 +63,11 @@
 
 
     .NOTES
-    Get-SnipeITAsset.ps1
+    Get-SnipeITHardware.ps1
     Alex Iuculano, 2020
 #>
 
-function Get-SnipeITAsset
+function Get-SnipeITHardware
 {
     [CmdletBinding(DefaultParameterSetName = "Default")]
     Param
@@ -212,6 +212,6 @@ function Get-SnipeITAsset
         }
 
         
-        Invoke-SnipeITRestMethod -Method "GET" -Url $endpoint -APIKey $APIKey | ConvertFrom-SnipeITAPI -Type "axSnipeIT.Asset"
+        Invoke-SnipeITRestMethod -Method "GET" -Url $endpoint -APIKey $APIKey | ConvertFrom-SnipeITAPI -Type "axSnipeIT.Hardware"
     }
 }

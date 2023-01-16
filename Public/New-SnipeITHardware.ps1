@@ -25,11 +25,11 @@
 
 
     .NOTES
-    New-SnipeITAsset.ps1
+    New-SnipeITHardware.ps1
     Alex Iuculano, 2020
 #> 
 
-function New-SnipeITAsset
+function New-SnipeITHardware
 {
     [CmdletBinding(SupportsShouldProcess = $true)]
     Param

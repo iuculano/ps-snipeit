@@ -13,11 +13,11 @@
 
 
     .NOTES
-    Remove-SnipeITAsset.ps1
+    Remove-SnipeITHardware.ps1
     Alex Iuculano, 2020
 #>
 
-function Remove-SnipeITAsset
+function Remove-SnipeITHardware
 {
     [CmdletBinding(DefaultParameterSetName = "Default",
                    ConfirmImpact           = "High",
@@ -27,7 +27,7 @@ function Remove-SnipeITAsset
         [Parameter(Position          = 0,
                    ValueFromPipeline = $true,
                    ParameterSetName  = "InputObject")]
-        [PSTypeName("axSnipeIT.Asset")][Object]$InputObject,
+        [PSTypeName("axSnipeIT.Hardware")][Object]$InputObject,
 
         [Parameter(Position          = 0,
                    Mandatory         = $true,

@@ -3,8 +3,8 @@
     Assign one or more Snipe-IT assets.
 
     .PARAMETER InputObject
-    Specifies an axSnipeIT.Asset object returned by a previous 
-    Get-SnipeITAsset call. This will be mapped to the user's Id.
+    Specifies an axSnipeIT.Hardware object returned by a previous 
+    Get-SnipeITHardware call. This will be mapped to the user's Id.
 
     .PARAMETER Id
     Specifies the id of the asset to update.
@@ -43,11 +43,11 @@
 
 
     .NOTES
-    Set-SnipeITAssetAssignment.ps1
+    Set-SnipeITHardwareAssignment.ps1
     Alex Iuculano, 2020
 #>
 
-function Set-SnipeITAssetAssignment
+function Set-SnipeITHardwareAssignment
 {
     [CmdletBinding(DefaultParameterSetName = "Default",
                    SupportsShouldProcess   = $true)]
@@ -56,7 +56,7 @@ function Set-SnipeITAssetAssignment
         [Parameter(Position          = 0,
                    ValueFromPipeline = $true,
                    ParameterSetName  = "InputObject")]
-        [PSTypeName("axSnipeIT.Asset")][Object]$InputObject,
+        [PSTypeName("axSnipeIT.Hardware")][Object]$InputObject,
 
         [Parameter(Position          = 0,
                    Mandatory         = $true,
