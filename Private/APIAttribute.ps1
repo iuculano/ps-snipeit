@@ -7,16 +7,24 @@ public class APIQueryStringAttribute : System.Attribute
     public string APIParameterName      { get; set; }
     public bool   TreatAsBoundParameter { get; set; }
 
-
-    public APIQueryStringAttribute(string apiParameterName, bool bindParam)
-    {
-        this.APIParameterName      = apiParameterName;
-        this.TreatAsBoundParameter = true;
-    }
-
+    
     public APIQueryStringAttribute()
     {
 
+    }
+
+    public APIQueryStringAttribute(string apiParameterName)
+    {
+        this.APIParameterName      = apiParameterName;
+        this.TreatAsBoundParameter = false;
+    }
+
+    // Seems like optional parameters don't work correctly in PowerShell???
+    // https://github.com/PowerShell/PowerShell/issues/9684
+    public APIQueryStringAttribute(string apiParameterName, bool bindParam)
+    {
+        this.APIParameterName      = apiParameterName;
+        this.TreatAsBoundParameter = bindParam;
     }
 }
 
@@ -26,15 +34,21 @@ public class APISubmittableAttribute : System.Attribute
     public bool   TreatAsBoundParameter { get; set; }
 
 
+    public APISubmittableAttribute()
+    {
+
+    }
+
+    public APISubmittableAttribute(string apiParameterName)
+    {
+        this.APIParameterName      = apiParameterName;
+        this.TreatAsBoundParameter = false;
+    }
+
     public APISubmittableAttribute(string apiParameterName, bool bindParam)
     {
         this.APIParameterName      = apiParameterName;
         this.TreatAsBoundParameter = bindParam;
-    }
-
-    public APISubmittableAttribute()
-    {
-
     }
 }
 "@
