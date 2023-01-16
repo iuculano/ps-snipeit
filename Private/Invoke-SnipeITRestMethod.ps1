@@ -32,32 +32,23 @@ function Invoke-InternalGuardedRestMethod
     )
 
     
-    $prettyReponse = [PSCustomObject]@{
-        Uri        = $Params.Uri
-        Method     = $Params.Method.ToString().ToUpper()
-        StatusCode = 0
-        Message    = ""
-    }
-
     try
     {
-        $response                 = Invoke-RestMethod @Params
-        $prettyReponse.StatusCode = 200
+        $response = Invoke-RestMethod @Params
     }
 
     catch
     {
-        $response                = $_.Exception.Response
-        prettyReponse.StatusCode = [Int32]$response.StatusCode
-        prettyReponse.StatusCode = $response.StatusDescription
+        # Need to absorb this exception and handle it ourselves because it 
+        # can simply be from us getting rate limited - in which case we just
+        # try again
+        $response = $_.Exception.Response
     }
 
     # https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.psmemberinfocollection-1
     # If status and messages both exist - we probably have a failure
-    $status   = $response.PSObject.Properties.Item("status")
-    $messages = $response.PSObject.Properties.Item("messages")
-    if (($status   -and $status.Value -eq "error") -and
-        ($messages -and $null         -ne $messages.Value))
+    $status = $response.PSObject.Properties.Item("status")
+    if ($status -and $status.Value -eq "error")
     {
         # There can be multiple error messages, so try to format them a
         # little nicer...
@@ -71,24 +62,18 @@ function Invoke-InternalGuardedRestMethod
 
         # Some errors seem to return their messages in... 'messages'
         # and for some reason others return it in 'errors'.
-        $errorProperties = foreach($wtf in @("messages", "errors"))
+        $notifications = foreach($notificationType in @("messages", "errors"))
         {
-            $response.messages.PSObject.Properties
+            if ($response.PSObject.Properties.Item($notificationType))
+            {
+                foreach($notification in $response."$notificationType")
+                {
+                    "- $notification"
+                }
+            }
         }
 
-        if ($errorProperties)
-        {
-            $longestName    = ($errorProperties.Name | Sort-Object Length -Descending)[0].Length
-            $formattedError = foreach($property in $errorProperties)
-            {
-                "- $($property.Name.PadRight($longestName, ' ')) : $($property.Value)`n"
-            }
-    
-            $formattedError = "Connection succesful, but API returned an error.`n`n" + (-join $formattedError).TrimEnd("`n")
-            [PSCustomObject]@{
-                Status = Value
-            }
-        }
+        $notifications | Out-String | Write-Error
     }
 
     $response
@@ -189,8 +174,8 @@ function Invoke-SnipeITRestMethod
             for ($i = 1; $i -lt $pages; $i++)
             {
                 # Always advance by the max page size and update query string
-                $query["offset"]  = ([Int32]::Parse($query["offset"]) + 500).ToString()
-                $uri.Query        = $query.ToString()
+                $query["offset"] = ([Int32]::Parse($query["offset"]) + 500).ToString()
+                $uri.Query       = $query.ToString()
 
                 
                 # Actually get and append additional paged data
