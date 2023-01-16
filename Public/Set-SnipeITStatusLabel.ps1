@@ -62,7 +62,6 @@ function Set-SnipeITStatusLabel
         [Int32[]]$Id,
 
         [APISubmittableAttribute()]
-        [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [String]$Name,
 
