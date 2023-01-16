@@ -132,7 +132,8 @@ function Get-SnipeITAsset
         [ValidateNotNullOrEmpty()]
         [String]$StatusId,
 
-        [Parameter(Mandatory         = $true,
+        [Parameter(Position          = 0,
+                   Mandatory         = $true,
                    ValueFromPipeline = $true,
                    ParameterSetName  = "Id")]
         [ValidateRange(0, [Int32]::MaxValue)]
@@ -151,6 +152,9 @@ function Get-SnipeITAsset
         [Parameter(ParameterSetName = "Audit")]
         [ValidateSet("Due", "Overdue")]
         [String]$Audit,
+
+        [Parameter(ParameterSetName = "Id")]
+        [Switch]$License,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -175,7 +179,16 @@ function Get-SnipeITAsset
     
             "Id"
             {
-                $endpoint = "$Url/api/v1/hardware/$Id"
+                if ($License)
+                {
+                    $endpoint = "$Url/api/v1/hardware/$Id/licenses"
+                }
+
+                else
+                {
+                    $endpoint = "$Url/api/v1/users/$Id"
+                }
+
                 break
             }
     
@@ -198,7 +211,7 @@ function Get-SnipeITAsset
             }
         }
 
-    
+        
         Invoke-SnipeITRestMethod -Method "GET" -Url $endpoint -APIKey $APIKey | ConvertFrom-SnipeITAPI -Type "axSnipeIT.Asset"
     }
 }
