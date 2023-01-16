@@ -72,6 +72,7 @@ FunctionsToExport =
     "Remove-SnipeITModel",
     "Remove-SnipeITStatusLabel",
     "Remove-SnipeITUser",
+    "Set-SnipeITAccessory",
     "Set-SnipeITHardware",
     "Set-SnipeITHardwareAssignment",
     "Set-SnipeITCategory",

@@ -43,11 +43,11 @@
 
 
     .NOTES
-    New-SnipeITAccessory.ps1
+    Set-SnipeITAccessory.ps1
     Alex Iuculano, 2020
 #> 
 
-function New-SnipeITAccessory
+function Set-SnipeITAccessory
 {
     [CmdletBinding(SupportsShouldProcess = $true)]
     Param
