@@ -170,7 +170,7 @@ function Invoke-SnipeITRestMethod
             # offset gets assigned a default
             if ($null -eq $query["limit"])
             {
-                $query["limit"] = $data.total 
+                $query["limit"] = $response.total 
             }
             
             if ($null -eq $query["offset"])
@@ -180,7 +180,7 @@ function Invoke-SnipeITRestMethod
 
 
             # Just use the max value (500) as the page size
-            $count = [Math]::Min($data.total, $query["limit"])
+            $count = [Math]::Min($response.total, $query["limit"])
             $pages = [Math]::Ceiling($count / 500)
             for ($i = 1; $i -lt $pages; $i++)
             {
