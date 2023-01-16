@@ -149,7 +149,7 @@ function New-SnipeITUser
     )
 
     
-    if (!$PSCmdlet.ShouldProcess($Name))
+    if (!$PSCmdlet.ShouldProcess($Username))
     {
         return
     }
