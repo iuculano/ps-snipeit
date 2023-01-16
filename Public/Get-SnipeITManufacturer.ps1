@@ -5,8 +5,20 @@
     .PARAMETER Id
     Specifies one or more manufacturers by id.
 
-    .PARAMETER Search
-    Specifies a text string to search the asset data for.
+    .PARAMETER Name
+    Specifies the name of a manufacturer to retrieve.
+
+    .PARAMETER Website
+    Specifies the manufacturer's website/homepage to use for the lookup.
+
+    .PARAMETER SupportUrl
+    Specifies the manufacturer's support url to use for the lookup.
+
+    .PARAMETER SupportPhone
+    Specifies the manufacturer's support phone number to use for the lookup.
+
+    .PARAMETER SupportEmail
+    Specifies the manufacturer's support email address to use for the lookup.
 
     .PARAMETER Url
     Specifies the SnipeIT endpoint to which the request is sent.
@@ -34,7 +46,27 @@ function Get-SnipeITManufacturer
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
         [ValidateNotNullOrEmpty()]
-        [String]$Search,
+        [String]$Name,
+
+        [APIQueryStringAttribute("url")]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Website,
+        
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
+        [String]$SupportUrl,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
+        [String]$SupportPhone,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
+        [String]$SupportEmail,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
