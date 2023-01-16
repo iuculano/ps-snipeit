@@ -2,6 +2,12 @@
     .SYNOPSIS
     Gets one or more Snipe-IT licenses.
 
+    .PARAMETER Id
+    Specifies one or more licenses by id.
+
+    .PARAMETER Linked
+    Returns linked data for a specified license id.
+
     .PARAMETER Limit
     Specifies the number of results to return.
 
@@ -25,12 +31,6 @@
     .PARAMETER Expand
     Specifies whether to return detailed information.
 
-    .PARAMETER Id
-    Restrict results to a specified license id.
-
-    .PARAMETER Linked
-    Returns linked data for a specified license id.
-
     .PARAMETER Url
     Specifies the SnipeIT endpoint to which the request is sent.
 
@@ -48,6 +48,16 @@ function Get-SnipeITLicense
     [CmdletBinding(DefaultParameterSetName = "Default")]
     Param
     (
+        [Parameter(Mandatory         = $true,
+                   ValueFromPipeline = $true,
+                   ParameterSetName = "Id")]
+        [ValidateRange(0, [Int32]::MaxValue)]
+        [Int32]$Id,
+
+        [Parameter(ParameterSetName = "Id")]
+        [ValidateSet("Seats")]
+        [String]$Linked,
+
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
         [ValidateRange(1, [Int32]::MaxValue)]
@@ -82,16 +92,6 @@ function Get-SnipeITLicense
         [Parameter(ParameterSetName = "Default")]
         [ValidateSet("True", "False")]
         [String]$Expand,
-
-        [Parameter(Mandatory         = $true,
-                   ValueFromPipeline = $true,
-                   ParameterSetName = "Id")]
-        [ValidateRange(0, [Int32]::MaxValue)]
-        [Int32]$Id,
-
-        [Parameter(ParameterSetName = "Id")]
-        [ValidateSet("Seats")]
-        [String]$Linked,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

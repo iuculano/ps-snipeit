@@ -2,6 +2,9 @@
     .SYNOPSIS
     Gets one or more Snipe-IT assets.
 
+    .PARAMETER Id
+    Specifies one or more hardware assets by id.
+
     .PARAMETER Limit
     Specifies the number of results to return.
 
@@ -43,9 +46,6 @@
     .PARAMETER StatusId
     Restrict results to a specified staus id.
 
-    .PARAMETER Id
-    Restrict results to a specified asset id.
-
     .PARAMETER AssetTag
     Restrict results to a specified asset tag.
 
@@ -72,6 +72,13 @@ function Get-SnipeITHardware
     [CmdletBinding(DefaultParameterSetName = "Default")]
     Param
     (
+        [Parameter(Position          = 0,
+                   Mandatory         = $true,
+                   ValueFromPipeline = $true,
+                   ParameterSetName  = "Id")]
+        [ValidateRange(0, [Int32]::MaxValue)]
+        [Int32]$Id,
+
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
         [ValidateRange(1, [Int32]::MaxValue)]
@@ -131,13 +138,6 @@ function Get-SnipeITHardware
         [Parameter(ParameterSetName = "Default")]
         [ValidateNotNullOrEmpty()]
         [String]$StatusId,
-
-        [Parameter(Position          = 0,
-                   Mandatory         = $true,
-                   ValueFromPipeline = $true,
-                   ParameterSetName  = "Id")]
-        [ValidateRange(0, [Int32]::MaxValue)]
-        [Int32]$Id,
 
         [Parameter(Mandatory        = $true,
                    ParameterSetName = "AssetTag")]

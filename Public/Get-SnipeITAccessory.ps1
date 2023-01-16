@@ -2,6 +2,9 @@
     .SYNOPSIS
     Gets one or more Snipe-IT accessories.
 
+    .PARAMETER Id
+    Specifies one or more accessories by id.
+
     .PARAMETER Limit
     Specifies the number of results to return.
 
@@ -11,9 +14,6 @@
     .PARAMETER Search
     Specifies a text string to search the asset data for.
 
-    .PARAMETER OrderNumber
-    Restrict results to accessories with a specified order number.
-
     .PARAMETER Sort
     Specifies the column name to sort by.
 
@@ -22,11 +22,12 @@
     .PARAMETER Order
     Specifies the order to use on the sort column.
 
+    .PARAMETER OrderNumber
+    Restrict results to accessories with a specified order number.
+
     .PARAMETER Expand
     Specifies whether to return detailed information.
 
-    .PARAMETER Id
-    Restrict results to a specified accessory id.
 
     .PARAMETER Url
     Specifies the SnipeIT endpoint to which the request is sent.
@@ -45,6 +46,12 @@ function Get-SnipeITAccessory
     [CmdletBinding(DefaultParameterSetName = "Default")]
     Param
     (
+        [Parameter(Mandatory         = $true,
+                   ValueFromPipeline = $true,
+                   ParameterSetName  = "Id")]
+        [ValidateRange(0, [Int32]::MaxValue)]
+        [Int32]$Id,
+
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
         [ValidateRange(1, [Int32]::MaxValue)]
@@ -63,11 +70,6 @@ function Get-SnipeITAccessory
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
         [ValidateNotNullOrEmpty()]
-        [String]$OrderNumber,
-
-        [APIQueryStringAttribute()]
-        [Parameter(ParameterSetName = "Default")]
-        [ValidateNotNullOrEmpty()]
         [String]$Sort,
 
         [APIQueryStringAttribute()]
@@ -77,14 +79,13 @@ function Get-SnipeITAccessory
 
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
+        [String]$OrderNumber,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
         [ValidateSet("True", "False")]
         [String]$Expand,
-
-        [Parameter(Mandatory         = $true,
-                   ValueFromPipeline = $true,
-                   ParameterSetName  = "Id")]
-        [ValidateRange(0, [Int32]::MaxValue)]
-        [Int32]$Id,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

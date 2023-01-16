@@ -2,11 +2,11 @@
     .SYNOPSIS
     Gets one or more Snipe-IT companies.
 
+    .PARAMETER Id
+    Specifies one or more companies by id.
+
     .PARAMETER Search
     Specifies a text string to search the asset data for.
-
-    .PARAMETER Id
-    Restrict results to a specified company id.
 
     .PARAMETER Url
     Specifies the SnipeIT endpoint to which the request is sent.
@@ -25,16 +25,16 @@ function Get-SnipeITCompany
     [CmdletBinding(DefaultParameterSetName = "Default")]
     Param
     (
-        [APIQueryStringAttribute()]
-        [Parameter(ParameterSetName = "Default")]
-        [ValidateNotNullOrEmpty()]
-        [String]$Search,
-
         [Parameter(Mandatory         = $true,
                    ValueFromPipeline = $true,
                    ParameterSetName = "Id")]
         [ValidateRange(0, [Int32]::MaxValue)]
         [Int32]$Id,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Search,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

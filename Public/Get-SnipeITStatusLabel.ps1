@@ -2,6 +2,12 @@
     .SYNOPSIS
     Gets one or more Snipe-IT status labels.
 
+    .PARAMETER Id
+    Specifies one or more status labels by id.
+
+    .PARAMETER Linked
+    Returns linked data for a specified status label id.
+
     .PARAMETER Limit
     Specifies the number of results to return.
 
@@ -18,12 +24,6 @@
 
     .PARAMETER Order
     Specifies the order to use on the sort column.
-
-    .PARAMETER Id
-    Restrict results to a specified status label id.
-
-    .PARAMETER Linked
-    Returns linked data for a specified status label id.
 
     .PARAMETER Url
     Specifies the SnipeIT endpoint to which the request is sent.
@@ -42,6 +42,16 @@ function Get-SnipeITStatusLabel
     [CmdletBinding(DefaultParameterSetName = "Default")]
     Param
     (
+        [Parameter(Mandatory         = $true,
+                   ValueFromPipeline = $true,
+                   ParameterSetName = "Id")]
+        [ValidateRange(0, [Int32]::MaxValue)]
+        [Int32]$Id,
+
+        [Parameter(ParameterSetName = "Id")]
+        [ValidateSet("Assets")]
+        [String]$Linked,
+
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
         [ValidateRange(1, [Int32]::MaxValue)]
@@ -66,16 +76,6 @@ function Get-SnipeITStatusLabel
         [Parameter(ParameterSetName = "Default")]
         [ValidateSet("Ascending", "Descending")]
         [String]$Order,
-
-        [Parameter(Mandatory         = $true,
-                   ValueFromPipeline = $true,
-                   ParameterSetName = "Id")]
-        [ValidateRange(0, [Int32]::MaxValue)]
-        [Int32]$Id,
-
-        [Parameter(ParameterSetName = "Id")]
-        [ValidateSet("Assets")]
-        [String]$Linked,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
