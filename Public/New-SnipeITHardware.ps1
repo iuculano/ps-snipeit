@@ -46,7 +46,7 @@ function New-SnipeITHardware
 
         [APISubmittableAttribute()]
         [Parameter(Mandatory = $true)]
-        [ValidateRange(0, [Int32]::MaxValue)]
+        [ValidateRange(1, [Int32]::MaxValue)]
         [Int32]$ModelId,
 
         [APISubmittableAttribute()]
