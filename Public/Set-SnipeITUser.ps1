@@ -36,8 +36,6 @@
     .PARAMETER JobTitle
     Specifies the job title to set on the user.
 
-    .PARAMETER ManagerId
-    Specifies the manager to set on the user, by id.
 
     .PARAMETER EmployeeNumber
     Specifies the employee number/id to set on the user.
@@ -45,20 +43,24 @@
     .PARAMETER Notes
     Specifies additional notes to set on the user.
 
-    .PARAMETER CompanyId
-    Specifies the id of the company that the user should be bound to.
 
     .PARAMETER TwoFactorEnrolled
     Specifies whether user is enrolled in MFA.
 
     .PARAMETER TwoFactorOptin
     ?
-    
-    .PARAMETER DepartmentId,
-    Specifies the id of the department that the user should be bound to.
+
+    .PARAMETER CompanyId
+    Specifies the id of the company that the user should be bound to.
 
     .PARAMETER LocationId
     Specifies the id of the location that the user should be bound to.
+
+    .PARAMETER DepartmentId,
+    Specifies the id of the department that the user should be bound to.
+
+    .PARAMETER ManagerId
+    Specifies the manager to set on the user, by id.
 
     .PARAMETER Url
     Specifies the SnipeIT endpoint to which the request is sent.
@@ -120,10 +122,6 @@ function Set-SnipeITUser
         
         [APISubmittableAttribute("jobtitle")]
         [String]$JobTitle,
-        
-        [APISubmittableAttribute()]
-        [ValidateRange(0, [Int32]::MaxValue)]
-        [Int32]$ManagerId,
 
         [APISubmittableAttribute("employee_num")]
         [String]$EmployeeNumber,
@@ -136,18 +134,22 @@ function Set-SnipeITUser
         [Int32]$CompanyId,
 
         [APISubmittableAttribute()]
-        [Bool]$TwoFactorEnrolled,
+        [ValidateRange(0, [Int32]::MaxValue)]
+        [Int32]$LocationId,
 
-        [APISubmittableAttribute()]
-        [Bool]$TwoFactorOptin,
-        
         [APISubmittableAttribute()]
         [ValidateRange(0, [Int32]::MaxValue)]
         [Int32]$DepartmentId,
 
         [APISubmittableAttribute()]
         [ValidateRange(0, [Int32]::MaxValue)]
-        [Int32]$LocationId,
+        [Int32]$ManagerId,
+
+        [APISubmittableAttribute()]
+        [Bool]$TwoFactorEnrolled,
+
+        [APISubmittableAttribute()]
+        [Bool]$TwoFactorOptin,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
