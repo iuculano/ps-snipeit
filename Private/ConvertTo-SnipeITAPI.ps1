@@ -37,9 +37,9 @@ function ConvertTo-SnipeITAPI
         # Look for the existence of the Attributes, anything tagged with them
         # will be doing some work with the Snipe-IT API, in some capacity
         $variable  = (Get-Variable $param.Key)
-        $attribute = $variable.Attributes | Where-Object { 
+        $attribute = $variable.Attributes.Where({
             $_.TypeId.Name -contains "API$($As)Attribute"
-        }
+        })
 
         # Just bail early if there's no attributes defined
         if (!$attribute)
