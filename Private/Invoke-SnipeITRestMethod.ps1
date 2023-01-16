@@ -54,8 +54,10 @@ function Invoke-InternalGuardedRestMethod
 
     # https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.psmemberinfocollection-1
     # If status and messages both exist - we probably have a failure
-    if ($response.PSObject.Properties.Item("status") -and
-        $response.status                             -eq "error")
+    $status   = $response.PSObject.Properties.Item("status")
+    $messages = $response.PSObject.Properties.Item("messages")
+    if (($status   -and $status.Value -eq "error") -and
+        ($messages -and $null         -ne $messages.Value))
     {
         # There can be multiple error messages, so try to format them a
         # little nicer...
