@@ -173,7 +173,7 @@ function Set-SnipeITAsset
             }
 
 
-            $endpoint = "$Url/api/v1/assets/$i"   
+            $endpoint = "$Url/api/v1/hardware/$i"   
             $table    = ConvertTo-SnipeITAPI $PSCmdlet -As "Submittable"
             Invoke-SnipeITRestMethod -Method "PATCH" -Url $endpoint -APIKey $APIKey -Body $table
         }
