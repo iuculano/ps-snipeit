@@ -75,10 +75,10 @@ function ConvertFrom-SnipeITAPI
                 {
                     $name += [Char]::ToUpper($split[0]) + $split.Substring(1)
                 }
-        
-        
+
+
                 # If it's a value, just assign it
-                if ($property.Value?.GetType().Name -ne "PSCustomObject")
+                if ($property.TypeNameOfValue -ne "System.Management.Automation.PSCustomObject")
                 {
                     $object[$name] = $property.Value
                 }
