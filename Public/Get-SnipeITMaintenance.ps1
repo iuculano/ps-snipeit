@@ -60,7 +60,7 @@ function Get-SnipeITMaintenance
         [String]$Order,
 
         [APIQueryStringAttribute()]
-        [ValidateRange(0, [Int32]::MaxValue)]
+        [ValidateRange(1, [Int32]::MaxValue)]
         [Int32]$AssetId,
 
         [Parameter(Mandatory = $true)]
