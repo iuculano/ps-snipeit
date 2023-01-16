@@ -1,0 +1,17 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "Ubuntu",
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+	"features": {
+		"ghcr.io/devcontainers/features/powershell:1": {}
+	},
+
+	"postCreateCommand": "Install-Module Pester -Scope CurrentUser -Force",
+
+	"customizations": {
+		"vscode": {
+		  "extensions": ["ms-vscode.powershell"]
+		}
+	}
+}
