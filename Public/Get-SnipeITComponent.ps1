@@ -19,6 +19,9 @@
 
     This expects snake_case as the naming scheme.
 
+    .PARAMETER Name
+    Specifies the name of the component to look up.
+
     .PARAMETER Order
     Specifies the order to use on the sort column.
 
@@ -70,6 +73,11 @@ function Get-SnipeITComponent
         [Parameter(ParameterSetName = "Default")]
         [ValidateNotNullOrEmpty()]
         [String]$Sort,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Name,
 
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
