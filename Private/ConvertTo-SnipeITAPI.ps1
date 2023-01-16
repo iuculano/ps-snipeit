@@ -29,29 +29,72 @@ function ConvertTo-SnipeITAPI
     )
 
 
-    $boundParams = $PSCmdletVariable.MyInvocation.BoundParameters
-    $query       = [System.Web.HttpUtility]::ParseQueryString("")
+    $query = [System.Web.HttpUtility]::ParseQueryString("")
 
-    foreach ($param in $boundParams.GetEnumerator())
+    # Allllll of this is included since we're not parsing BoundParameters, so
+    # filtering it down is a must
+    $blacklist =
+    @(
+        # Our stuff
+        "Type",
+        
+        # Built-in cmdlet parameters
+        "Verbose",
+        "Debug",
+        "ErrorAction",
+        "WarningAction",
+        "InformationAction",
+        "ErrorVariable",
+        "WarningVariable",
+        "InformationVariable",
+        "OutVariable",
+        "OutBuffer",
+        "PipelineVariable",
+        "WhatIf",
+        "Confirm"
+    )
+
+    $filteredParams = $PSCmdletVariable.MyInvocation.MyCommand.Parameters.GetEnumerator().Where({ $_.Key -notin $blacklist })
+    foreach ($param in $filteredParams)
     {
-        # Look for the existence of the Attributes, anything tagged with them
-        # will be doing some work with the Snipe-IT API, in some capacity
-        $variable  = (Get-Variable $param.Key)
-        $attribute = $variable.Attributes.Where({
-            $_.TypeId.Name -contains "API$($As)Attribute"
-        })
+        $variable = (Get-Variable $param.Key)
 
-        # Just bail early if there's no attributes defined
-        if (!$attribute)
+        # Skip if there's no value to possibly parse
+        if ($null -eq $variable.Value)
         {
             continue
         }
 
 
+        # Look for the existence of the Attributes, anything tagged with them
+        # will be doing some work with the Snipe-IT API, in some capacity
+        $attribute = $variable.Attributes.Where({
+            $_.TypeId.Name -contains "API$($As)Attribute"
+        })
 
+        # Skip if parameter is not tagged with an attribute
+        if (!$attribute)
+        {
+            continue
+        }
+
+        # Asssigning a default value won't cause PowerShell to consider it a
+        # bound parameter, so we support specifying that you want that that
+
+        # If TreatAsBoundParameter isn't set, check if the value is actually
+        # in the BoundParameters list. If it's not, it's not, it can be skipped.
+        elseif (!$attribute.TreatAsBoundParameter -and
+                 $variable.Name                   -notin $PSCmdletVariable.MyInvocation.BoundParameters.Keys)
+        {
+            continue
+        }
+
+
+        # If we've gotten this far, there's data to convert
         if ($attribute.APIParameterName)
         {
             # Direct specifications in the attribute are considered gospel
+            # Simply override the key name if it's specified
             $key = $attribute.APIParameterName
         }
 

@@ -4,12 +4,14 @@
 $source = @"
 public class APIQueryStringAttribute : System.Attribute
 {
-    public string APIParameterName;
+    public string APIParameterName      { get; set; }
+    public bool   TreatAsBoundParameter { get; set; }
 
 
-    public APIQueryStringAttribute(string apiParameterName)
+    public APIQueryStringAttribute(string apiParameterName, bool bindParam)
     {
-        this.APIParameterName = apiParameterName;
+        this.APIParameterName      = apiParameterName;
+        this.TreatAsBoundParameter = true;
     }
 
     public APIQueryStringAttribute()
@@ -20,12 +22,14 @@ public class APIQueryStringAttribute : System.Attribute
 
 public class APISubmittableAttribute : System.Attribute
 {
-    public string APIParameterName;
+    public string APIParameterName      { get; set; }
+    public bool   TreatAsBoundParameter { get; set; }
 
 
-    public APISubmittableAttribute(string apiParameterName)
+    public APISubmittableAttribute(string apiParameterName, bool bindParam)
     {
-        this.APIParameterName = apiParameterName;
+        this.APIParameterName      = apiParameterName;
+        this.TreatAsBoundParameter = bindParam;
     }
 
     public APISubmittableAttribute()
