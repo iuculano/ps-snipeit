@@ -43,7 +43,7 @@ function New-SnipeITManufacturer
     }
 
 
-    $endpoint = "$Url/api/v1/statuslabels"   
+    $endpoint = "$Url/api/v1/manufacturers"   
     $table    = ConvertTo-SnipeITAPI $PSCmdlet -As "Submittable"
     Invoke-SnipeITRestMethod -Method "POST" -Url $endpoint -APIKey $APIKey -Body $table
 }
