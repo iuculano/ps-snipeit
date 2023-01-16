@@ -90,6 +90,8 @@ function Invoke-InternalGuardedRestMethod
             }
         }
     }
+
+    $response
 }
 
 function Invoke-SnipeITRestMethod
