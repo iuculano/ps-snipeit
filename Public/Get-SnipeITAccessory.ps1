@@ -28,7 +28,6 @@
     .PARAMETER Expand
     Specifies whether to return detailed information.
 
-
     .PARAMETER Url
     Specifies the SnipeIT endpoint to which the request is sent.
 
@@ -49,7 +48,7 @@ function Get-SnipeITAccessory
         [Parameter(Mandatory         = $true,
                    ValueFromPipeline = $true,
                    ParameterSetName  = "Id")]
-        [ValidateRange(0, [Int32]::MaxValue)]
+        [ValidateRange(1, [Int32]::MaxValue)]
         [Int32]$Id,
 
         [APIQueryStringAttribute()]
