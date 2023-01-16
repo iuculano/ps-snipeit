@@ -84,11 +84,10 @@ function Set-SnipeITAccessory
         [DateTime]$PurchaseDate,
 
         [APISubmittableAttribute()]
-        [ValidateNotNullOrEmpty()]
         [String]$ModelNumber,
 
         [APISubmittableAttribute()]
-        [ValidateRange(0, [Int32]::MaxValue)]
+        [ValidateRange(1, [Int32]::MaxValue)]
         [Int32]$CategoryId,
 
         [APISubmittableAttribute()]
