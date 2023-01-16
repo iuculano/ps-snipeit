@@ -105,7 +105,7 @@ function New-SnipeITUser
         [ValidateNotNullOrEmpty()]
         [String]$Phone,
 
-        [APISubmittableAttribute("job_title")]
+        [APISubmittableAttribute("jobtitle")]
         [ValidateNotNullOrEmpty()]
         [String]$JobTitle,
 
