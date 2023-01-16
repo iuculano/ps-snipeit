@@ -25,6 +25,12 @@
     .PARAMETER Order
     Specifies the order to use on the sort column.
 
+    .PARAMETER Name
+    Specifies the name of the status label to search for.
+
+    .PARAMETER StatusType
+    Specifies the type of the status label to search for.
+
     .PARAMETER Url
     Specifies the SnipeIT endpoint to which the request is sent.
 
@@ -76,6 +82,16 @@ function Get-SnipeITStatusLabel
         [Parameter(ParameterSetName = "Default")]
         [ValidateSet("Ascending", "Descending")]
         [String]$Order,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Name,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateSet("Deployable", "Pending", "Archived")]
+        [String]$StatusType,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
