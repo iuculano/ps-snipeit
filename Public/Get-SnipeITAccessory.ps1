@@ -84,8 +84,7 @@ function Get-SnipeITAccessory
 
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
-        [ValidateSet("True", "False")]
-        [String]$Expand,
+        [Bool]$Expand,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
