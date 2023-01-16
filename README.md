@@ -11,12 +11,12 @@ $PSDefaultParameterValues["*-SnipeIT*:APIKey"] = "SOME_REALLY_LONG_API_KEY"
 ### Examples
 Get all assets.
 ```
-Get-SnipeITAsset
+Get-SnipeITHardware
 ```
 
 Get and count assets by their model.
 ```
-Get-SnipeITAsset | Group-Object { $_.Model.Name } | Sort-Object Count
+Get-SnipeITHardware | Group-Object { $_.Model.Name } | Sort-Object Count
 ```
 
 Change something about a user. (Protip: The 'Search' parameter is awesome)
@@ -31,5 +31,5 @@ Get-SnipeITLicense | Where-Object { !$_.Manufacturer }
 
 Immediately blow away all the assets in your database and get fired.
 ```
-Get-SnipeITAsset | Remove-SnipeITAsset -Confirm:$false
+Get-SnipeITHardware | Remove-SnipeITHardware -Confirm:$false
 ```
