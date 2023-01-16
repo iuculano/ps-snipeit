@@ -142,6 +142,16 @@ function ConvertTo-SnipeITAPI
                 # Snipe-IT expects hyphenated dates
                 $value = ($variable.Value.ToShortDateString()).Replace("/", "-")
             }
+
+            "Int32"
+            {
+                # Allow setting null or 0 to effectively remove an integer field
+                if ($value -eq 0 -or 
+                    $null  -eq $value)
+                {
+                    $value = ""
+                }   
+            }
         
             default
             {
