@@ -65,7 +65,7 @@ function Wait-Command
     
     $tries = 0
     while (++$tries -le $MaxTries)
-    {        
+    {
         $result = $ScriptBlock.Invoke().Where($Condition)
         if ($result)
         {
