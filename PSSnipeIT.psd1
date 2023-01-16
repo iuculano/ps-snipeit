@@ -30,13 +30,13 @@ Copyright         = '(c) Alex Iuculano. All rights reserved.'
 Description       = 'Snipe-IT API wrapper.'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '7.0'
+PowerShellVersion = '5.1'
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = 
 @(
     "Get-SnipeITAccessory",
-    "Get-SnipeITAsset",
+    "Get-SnipeITHardware",
     "Get-SnipeITCategory",
     "Get-SnipeITCompany",
     "Get-SnipeITComponent",
@@ -49,7 +49,7 @@ FunctionsToExport =
     "Get-SnipeITStatusLabel",
     "Get-SnipeITUser",
     "New-SnipeITAccessory",
-    "New-SnipeITAsset",
+    "New-SnipeITHardware",
     "New-SnipeITCategory",
     "New-SnipeITCompany",
     "New-SnipeITComponent",
@@ -62,7 +62,7 @@ FunctionsToExport =
     "New-SnipeITModel",
     "New-SnipeITStatusLabel",
     "New-SnipeITUser",
-    "Remove-SnipeITAsset",
+    "Remove-SnipeITHardware",
     "Remove-SnipeITCategory",
     "Remove-SnipeITCompany",
     "Remove-SnipeITCustomFieldset",
@@ -72,8 +72,8 @@ FunctionsToExport =
     "Remove-SnipeITModel",
     "Remove-SnipeITStatusLabel",
     "Remove-SnipeITUser",
-    "Set-SnipeITAsset",
-    "Set-SnipeITAssetAssignment",
+    "Set-SnipeITHardware",
+    "Set-SnipeITHardwareAssignment",
     "Set-SnipeITCategory",
     "Set-SnipeITCompany",
     "Set-SnipeITCustomFieldset",
