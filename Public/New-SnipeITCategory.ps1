@@ -54,8 +54,8 @@
         [APISubmittableAttribute()]
         [Bool]$RequireAcceptance,
 
-        [APISubmittableAttribute("checkin_email")]
-        [Bool]$CheckInEmail,
+        [APISubmittableAttribute()]
+        [Bool]$CheckinEmail,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
