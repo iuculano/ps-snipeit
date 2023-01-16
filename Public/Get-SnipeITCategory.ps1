@@ -42,17 +42,17 @@ function Get-SnipeITCategory
         [Parameter(Mandatory         = $true,
                    ValueFromPipeline = $true,
                    ParameterSetName = "Id")]
-        [ValidateRange(0, [Int32]::MaxValue)]
+        [ValidateRange(1, [Int32]::MaxValue)]
         [Int32]$Id,
         
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
-        [ValidateRange(1, [Int32]::MaxValue)]
+        [ValidateRange(0, [Int32]::MaxValue)]
         [Int32]$Limit,
 
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
-        [ValidateRange(1, [Int32]::MaxValue)]
+        [ValidateRange(0, [Int32]::MaxValue)]
         [Int32]$Offset,
 
         [APIQueryStringAttribute()]
@@ -69,6 +69,33 @@ function Get-SnipeITCategory
         [Parameter(ParameterSetName = "Default")]
         [ValidateSet("Ascending", "Descending")]
         [String]$Order,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Name,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateRange(1, [Int32]::MaxValue)]
+        [Int32]$CategoryId,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
+        [String]$CategoryType,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [Bool]$UseDefaultEula,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [Bool]$RequireAcceptance,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [Bool]$CheckinEmail,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]

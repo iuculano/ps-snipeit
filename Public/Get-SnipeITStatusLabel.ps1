@@ -51,7 +51,7 @@ function Get-SnipeITStatusLabel
         [Parameter(Mandatory         = $true,
                    ValueFromPipeline = $true,
                    ParameterSetName = "Id")]
-        [ValidateRange(0, [Int32]::MaxValue)]
+        [ValidateRange(1, [Int32]::MaxValue)]
         [Int32]$Id,
 
         [Parameter(ParameterSetName = "Id")]
@@ -60,12 +60,12 @@ function Get-SnipeITStatusLabel
 
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
-        [ValidateRange(1, [Int32]::MaxValue)]
+        [ValidateRange(0, [Int32]::MaxValue)]
         [Int32]$Limit,
 
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
-        [ValidateRange(1, [Int32]::MaxValue)]
+        [ValidateRange(0, [Int32]::MaxValue)]
         [Int32]$Offset,
 
         [APIQueryStringAttribute()]

@@ -28,7 +28,7 @@ function Get-SnipeITDepartment
         [Parameter(Mandatory         = $true,
                    ValueFromPipeline = $true,
                    ParameterSetName  = "Id")]
-        [ValidateRange(0, [Int32]::MaxValue)]
+        [ValidateRange(1, [Int32]::MaxValue)]
         [Int32]$Id,
 
         [APIQueryStringAttribute()]

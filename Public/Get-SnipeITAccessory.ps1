@@ -53,12 +53,12 @@ function Get-SnipeITAccessory
 
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
-        [ValidateRange(1, [Int32]::MaxValue)]
+        [ValidateRange(0, [Int32]::MaxValue)]
         [Int32]$Limit,
 
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
-        [ValidateRange(1, [Int32]::MaxValue)]
+        [ValidateRange(0, [Int32]::MaxValue)]
         [Int32]$Offset,
 
         [APIQueryStringAttribute()]
