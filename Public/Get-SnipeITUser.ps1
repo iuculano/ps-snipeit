@@ -120,6 +120,8 @@ function Get-SnipeITUser
         }
     
 
-        Invoke-SnipeITRestMethod -Method "GET" -Url $endpoint -APIKey $APIKey | ConvertFrom-SnipeITAPI -Type "axSnipeIT.User"
+        Invoke-SnipeITRestMethod -Method "GET" -Url $endpoint -APIKey $APIKey | ConvertFrom-SnipeITAPI -Type "axSnipeIT.User" | ForEach-Object {
+            $_ | Add-Member -MemberType AliasProperty -Name "EmployeeNumber" -Value "EmployeeNum" -PassThru
+        }
     }
 }
