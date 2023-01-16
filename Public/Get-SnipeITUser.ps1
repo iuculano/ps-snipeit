@@ -25,6 +25,9 @@
     .PARAMETER Order
     Specifies the order to use on the sort column.
 
+    .PARAMETER Username
+    Specifies the username to search for.
+
     .PARAMETER Url
     Specifies the SnipeIT endpoint to which the request is sent.
 
@@ -70,17 +73,17 @@ function Get-SnipeITUser
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
         [ValidateNotNullOrEmpty()]
-        [String]$Username,
-
-        [APIQueryStringAttribute()]
-        [Parameter(ParameterSetName = "Default")]
-        [ValidateNotNullOrEmpty()]
         [String]$Sort,
 
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
         [ValidateSet("Ascending", "Descending")]
         [String]$Order,
+
+        [APIQueryStringAttribute()]
+        [Parameter(ParameterSetName = "Default")]
+        [ValidateNotNullOrEmpty()]
+        [String]$Username,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
