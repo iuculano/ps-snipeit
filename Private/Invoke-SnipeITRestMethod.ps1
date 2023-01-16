@@ -118,7 +118,7 @@ function Invoke-SnipeITRestMethod
     $uri   = $split[0].ToLower()
     if ($split.Length -gt 1)
     {
-        $uri += "?${$split[1]}"
+        $uri += "?$($split[1])"
     }
 
     $irmArgs =
@@ -151,7 +151,6 @@ function Invoke-SnipeITRestMethod
     # 500 of them in one shot.
     $response = { Invoke-InternalGuardedRestMethod $irmArgs } | Wait-Command @wcArgs
     
-
 
     if ($Method -eq "GET")
     {
