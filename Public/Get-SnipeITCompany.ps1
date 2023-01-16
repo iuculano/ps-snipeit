@@ -5,8 +5,8 @@
     .PARAMETER Id
     Specifies one or more companies by id.
 
-    .PARAMETER Search
-    Specifies a text string to search the asset data for.
+    .PARAMETER Name
+    Specifies the company name to search for.
 
     .PARAMETER Url
     Specifies the SnipeIT endpoint to which the request is sent.
@@ -34,7 +34,7 @@ function Get-SnipeITCompany
         [APIQueryStringAttribute()]
         [Parameter(ParameterSetName = "Default")]
         [ValidateNotNullOrEmpty()]
-        [String]$Search,
+        [String]$Name,
 
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
