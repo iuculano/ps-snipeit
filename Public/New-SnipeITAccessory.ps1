@@ -58,6 +58,7 @@ function New-SnipeITAccessory
         [String]$Name,
 
         [APISubmittableAttribute("qty")]
+        [Parameter(Mandatory = $true)]
         [ValidateRange(0, [Int32]::MaxValue)]
         [Int32]$Quantity,
 
