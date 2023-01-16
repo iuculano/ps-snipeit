@@ -1,10 +1,10 @@
 <#
     .SYNOPSIS
-    Gets one or more Snipe-IT accessories.
+    Gets one or more Snipe-IT users.
 
     .PARAMETER InputObject
-    Specifies an axSnipeIT.User object returned by a previous 
-    Get-SnipeITUser call. This will be mapped to the user's Id.
+    Specifies an axSnipeIT.User object returned by a previous Get-SnipeITUser 
+    call. This will be mapped to the user's Id.
 
     .PARAMETER Id
     Specifies the Id number of a user to update.

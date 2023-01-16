@@ -4,10 +4,10 @@
 
     .PARAMETER InputObject
     Specifies an axSnipeIT.Hardware object returned by a previous 
-    Get-SnipeITHardware call. This will be mapped to the user's Id.
+    Get-SnipeITHardware call. This will be mapped to the hardware's Id.
 
     .PARAMETER Id
-    Specifies the id of the asset to update.
+    Specifies the id of the hardware to update.
 
     .PARAMETER Type
     Specifies the type of asset assignment.
@@ -15,7 +15,7 @@
     Valid options are Checkin and Checkout.
 
     .PARAMETER AssignedUser
-    Specifies the id of the user to assign the asset to.
+    Specifies the id of the user to assign the h to.
 
     .PARAMETER AssignedAsset
     Specifies the id of the asset to assign the asset to.

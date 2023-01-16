@@ -4,7 +4,7 @@
 
     .PARAMETER InputObject
     Specifies an axSnipeIT.Category object returned by a previous 
-    Get-SnipeITCategory call. This will be mapped to the user's Id.
+    Get-SnipeITCategory call. This will be mapped to the categories Id.
 
     .PARAMETER Id
     Specifies the id of the category to update.

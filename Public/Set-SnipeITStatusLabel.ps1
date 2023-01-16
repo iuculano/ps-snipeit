@@ -2,6 +2,13 @@
     .SYNOPSIS
     Updates a Snipe-IT status label.
 
+    .PARAMETER InputObject
+    Specifies an axSnipeIT.StatusLabel object returned by a previous
+    Set-SnipeITStatusLabel call. This will be mapped to the status label's Id.
+    
+    .PARAMETER Id
+    Specifies the Id number of a status label to update.
+
     .PARAMETER Name
     Specifies the name of the status label.
 
@@ -12,18 +19,17 @@
     Specifies additional notes to assign to the status label.
 
     .PARAMETER Color
-    Specifies the color of the status label on the pie chart 
-    in the dashboard.
+    Specifies the color of the status label on the pie chart  in the dashboard.
 
     This expects the color in hex code format.
 
     .PARAMETER ShowInNav
-    Specifies whether the status label should show in the
-    left-side nav of the web UI.
+    Specifies whether the status label should show in the left-side nav of the
+    web UI.
 
     .PARAMETER DefaultLabel
-    Specifies whether the status label should be forced to
-    the top of the available statuses list.
+    Specifies whether the status label should be forced to the top of the
+    available statuses list.
 
     .PARAMETER Url
     Specifies the SnipeIT endpoint to which the request is sent.

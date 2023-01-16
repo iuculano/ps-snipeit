@@ -4,7 +4,7 @@
 
     .PARAMETER InputObject
     Specifies an axSnipeIT.Model object returned by a previous 
-    Get-SnipeITModel call. This will be mapped to the user's Id.
+    Get-SnipeITModel call. This will be mapped to the models's Id.
 
     .PARAMETER Id
     Specifies the id of the model to update.

@@ -4,7 +4,7 @@
 
      .PARAMETER InputObject
     Specifies an axSnipeIT.License object returned by a previous 
-    Get-SnipeITLicense call. This will be mapped to the user's Id.
+    Get-SnipeITLicense call. This will be mapped to the license's Id.
 
     .PARAMETER Id
     Specifies the id of the license to update.

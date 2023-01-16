@@ -4,7 +4,7 @@
 
     .PARAMETER InputObject
     Specifies an axSnipeIT.Manufacturer object returned by a previous 
-    Get-SnipeITManufacturer call. This will be mapped to the user's Id.
+    Get-SnipeITManufacturer call. This will be mapped to the manufacturer's Id.
 
     .PARAMETER Id
     Specifies the id of the manufacturer to update.

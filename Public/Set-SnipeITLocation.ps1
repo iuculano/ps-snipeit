@@ -4,7 +4,7 @@
 
     .PARAMETER InputObject
     Specifies an axSnipeIT.Location object returned by a previous 
-    Get-SnipeITLocation call. This will be mapped to the user's Id.
+    Get-SnipeITLocation call. This will be mapped to the locations's Id.
 
     .PARAMETER Id
     Specifies the id of the location to update.
