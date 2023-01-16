@@ -158,7 +158,7 @@ function Invoke-SnipeITRestMethod
         $query = [System.Web.HttpUtility]::ParseQueryString($uri.Query)        
 
         # Should get a total back from the call...
-        if (response.PSObject.Properties.Item("total"))
+        if ($response.PSObject.Properties.Item("total"))
         {
             # Stream out the first result, there will be no further API calls if
             # there isn't enough data to warrant pagination
