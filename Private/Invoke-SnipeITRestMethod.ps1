@@ -23,6 +23,14 @@
     Alex Iuculano, 2020
  #>
 
+ class SnipeITException : Exception 
+ {
+    SnipeITException($Message) : base($Message)
+    {
+
+    }
+}
+
 
 function Invoke-InternalGuardedRestMethod
 {
@@ -34,46 +42,87 @@ function Invoke-InternalGuardedRestMethod
     
     try
     {
-        $response = Invoke-RestMethod @Params
+        $response = Invoke-WebRequest @Params
+        $response = $response | ConvertFrom-Json -AsHashtable
     }
 
     catch
     {
-        # Need to absorb this exception and handle it ourselves because it 
-        # can simply be from us getting rate limited - in which case we just
-        # try again
-        $response = $_.Exception.Response
+        # This is definitely a breaking change with PowerShell 5
+        # From PS6 and up, this will return the body
+        $response = $_.ErrorDetails.Message | ConvertFrom-Json -AsHashtable
+
+        # This is the most harmless exception, we can just return false here
+        # to signify that we need to retry the request
+        if ([Int32]$_.Exception.Response.StatusCode -eq 429)
+        {
+            Write-Debug "Rate limited -> $($_.ErrorDetails)"
+            return $false
+        }
     }
 
-    # https://docs.microsoft.com/en-us/dotnet/api/system.management.automation.psmemberinfocollection-1
-    # If status and messages both exist - we probably have a failure
-    $status = $response.PSObject.Properties.Item("status")
-    if ($status -and $status.Value -eq "error")
+
+    # This seems to be the intended way for the API to return errors...
+    # https://snipe-it.readme.io/reference/api-overview
+    # It'll like like:
+    # {
+    #     "status": "error",
+    #     "messages": {
+    #         "status_id": [
+    #             "The selected status id is invalid."
+    #         ]
+    #     }
+    #   }
+    # }    
+    $isErrorNormal = $response["status"] -eq "error" -and $response["messages"]
+    if ($isErrorNormal)
+    {
+        $errorReasons = $response.messages
+    }
+
+    # But it can also generate errors in a different format because who knows
+    # {
+    #     "message": "The given data was invalid.",
+    #     "errors": {
+    #         "password": [
+    #             "The password must be at least 8 characters."
+    #         ]
+    #     }
+    # }
+    $isErrorWonky  = $response["message"] -and $response["errors"]
+    if ($isErrorWonky)
+    {
+        $errorReasons = $response.errors
+    }
+
+    if ($isErrorNormal -or $isErrorWonky)
     {
         # There can be multiple error messages, so try to format them a
         # little nicer...
+        # This will build up a single string to act as a cohesive error
 
-        # Need to be careful here - the API seems to have a handful of
-        # inconsistencies or flaws in the documentation. It doesn't always
-        # return what the docs say it will, and the way it returns errors
-        # doesn't always align across resource types.
-
-        # For example - creating a new user vs new hardware.
-
-        # Some errors seem to return their messages in... 'messages'
-        # and for some reason others return it in 'errors'.
-        $notifications = foreach($notificationType in @("messages", "errors"))
+        # Iterate over the keys in the messages first, since they pertain
+        # to the parameter that's in error
+        $lines = @()
+        foreach($parameter in $errorReasons.GetEnumerator())
         {
-            if ($response.PSObject.Properties.Item($notificationType))
+            # ConvertFrom-Json has parsed this has a PSCustomObject, need
+            # to jump through some hoops to split it into keys and values
+            foreach($reason in $parameter.Value)
             {
-                foreach($notification in $response."$notificationType")
-                {
-                    "- $notification"
-                }
+                $lines += "$reason"
             }
+
+            $lines += "`n"
         }
 
-        $notifications | Out-String | Write-Error
+        $errorMessage = ($lines | Out-String).Trim()
+        if ($errorMessage)
+        {
+            $exception = [SnipeITException]::New($errorMessage)
+            $record    = [Management.Automation.ErrorRecord]::New($exception, "SnipeITException", [Management.Automation.ErrorCategory]::InvalidOperation, $response)
+            $PSCmdlet.ThrowTerminatingError($record)
+        }
     }
 
     $response
@@ -101,18 +150,9 @@ function Invoke-SnipeITRestMethod
     )
 
 
-    # Lowercase the base URL so we don't need to care about it in individual
-    # functions
-    $split = $Url.Split("?")
-    $uri   = $split[0].ToLower()
-    if ($split.Length -gt 1)
-    {
-        $uri += "?$($split[1])"
-    }
-
     $irmArgs =
     @{
-        Uri     = $uri
+        Uri     = $Url
         Method  = $Method
         Headers = 
         @{
@@ -130,26 +170,21 @@ function Invoke-SnipeITRestMethod
         $irmArgs["Body"] = $Body | ConvertTo-Json
     }
 
-
-    $wcArgs =
-    @{
-        Interval = 5000
-        MaxTries = 12
-    }
-
     # Need to call the API at least once as it'll return the total number of
     # items for GETs. At that point, need to handle paging since we can only get
     # 500 of them in one shot.
-    $response = { Invoke-InternalGuardedRestMethod $irmArgs } | Wait-Command @wcArgs
-    
+    $response = $null
+    $response = { Invoke-InternalGuardedRestMethod $irmArgs } | Wait-Command -Interval 5000 -MaxTries 6
+    if ($null -eq $response)
+    {
+        return
+    }
+
 
     if ($Method -eq "GET")
     {
-        $uri   = [System.UriBuilder]::new($Url)
-        $query = [System.Web.HttpUtility]::ParseQueryString($uri.Query)        
-
-        # Should get a total back from the call...
-        if ($response.PSObject.Properties.Item("total"))
+        # API call was succesful and it returned some data
+        if ($response["total"] -and $response.total -gt 0)
         {
             # Stream out the first result, there will be no further API calls if
             # there isn't enough data to warrant pagination
@@ -159,6 +194,8 @@ function Invoke-SnipeITRestMethod
             # Set a couple defaults, these should exist in some capacity
             # This works nicely, since this assignment won't happen again once
             # offset gets assigned a default
+            $uri   = [System.UriBuilder]::new($Url)
+            $query = [System.Web.HttpUtility]::ParseQueryString($uri.Query)    
             if ($null -eq $query["limit"])
             {
                 $query["limit"] = $response.total 
@@ -189,5 +226,16 @@ function Invoke-SnipeITRestMethod
                 [PSCustomObject]$response.rows
             }
         }
+
+        # API call was succesful, but didn't return any data
+        elseif (!$response["total"] -and $response.Count -gt 0)
+        {
+            [PSCustomObject]$response
+        }
+    }
+
+    else
+    {
+        [PSCustomObject]$response
     }
 }
