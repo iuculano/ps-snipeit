@@ -117,9 +117,11 @@ function Invoke-SnipeITRestMethod
         Headers = 
         @{
             "Accept"        = "application/json"
-            "Content-Type"  = "application/json"
+            "Content-Type"  = "application/json; charset=utf-8"
             "Authorization" = "Bearer $APIKey"
         }
+
+        ContentType = "application/json; charset=utf-8"
     }
 
     # Conditionally add Body, this should never happen on a GET
