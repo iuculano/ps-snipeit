@@ -43,7 +43,7 @@ function New-SnipeITCustomFieldset
     }
 
 
-    $endpoint = "$Url/api/v1/fields"   
+    $endpoint = "$Url/api/v1/fieldset"   
     $table    = ConvertTo-SnipeITAPI $PSCmdlet -As "Submittable"
     Invoke-SnipeITRestMethod -Method "POST" -Url $endpoint -APIKey $APIKey -Body $table
 }
