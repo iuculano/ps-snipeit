@@ -117,8 +117,15 @@ function Invoke-SnipeITRestMethod
             # Set a couple defaults, these should exist in some capacity
             # This works nicely, since this assignment won't happen again once
             # offset gets assigned a default
-            $query["limit" ] ??= $data.total
-            $query["offset"] ??= 0
+            if ($null -eq $query["limit"])
+            {
+                $query["limit"] = $data.total 
+            }
+            
+            if ($null -eq $query["offset"])
+            {
+                $query["offset"] = 0
+            }
 
 
             # Just use the max value (500) as the page size
