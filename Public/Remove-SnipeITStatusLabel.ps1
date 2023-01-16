@@ -2,6 +2,10 @@
     .SYNOPSIS
     Remove one or more Snipe-IT status labels.
 
+    .PARAMETER InputObject
+    Specifies an axSnipeIT.StatusLabel object returned by a previous
+    Get-SnipeITStatusLabel call. This will be mapped to the status label's Id.
+
     .PARAMETER Id
     Specifies a status label id to remove.
 
