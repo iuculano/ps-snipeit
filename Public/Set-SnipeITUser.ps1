@@ -118,7 +118,7 @@ function Set-SnipeITUser
         [APISubmittableAttribute()]
         [String]$Phone,
         
-        [APISubmittableAttribute("job_title")]
+        [APISubmittableAttribute("jobtitle")]
         [String]$JobTitle,
         
         [APISubmittableAttribute()]
